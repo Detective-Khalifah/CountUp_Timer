@@ -1,6 +1,7 @@
 package com.example.countuptimer;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,8 +10,12 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+    int counter = 0;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -19,14 +24,30 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        final TextView textView = (TextView) findViewById(R.id.textView);
+        textView.setText("0");
+        Toast.makeText(getApplicationContext(), "Click the button to start ticking!",
+                Toast.LENGTH_LONG).show();
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Counting Up!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                final Handler handler = new Handler();
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run () {
+                        textView.setText(String.valueOf(counter++));
+                        handler.postDelayed(this, 1000);
+                    }
+                };
+                handler.post(runnable);
             }
         });
+
     }
 
     @Override
